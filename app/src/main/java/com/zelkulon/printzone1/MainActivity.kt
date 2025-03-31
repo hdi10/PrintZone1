@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import com.zelkulon.printzone1.ui.theme.PrintZone1Theme
 
 class MainActivity : ComponentActivity() {
@@ -15,8 +17,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             PrintZone1Theme {
                 Scaffold { innerPadding ->
-                    PrintMediaTabLayout()
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        PrintMediaTabLayout()
+                    }
                 }
+
             }
         }
     }
