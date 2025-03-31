@@ -36,6 +36,9 @@ fun PrintMediaTabLayout() {
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
+
+        Spacer(modifier = Modifier.height(128.dp))
+
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
             edgePadding = 8.dp
@@ -67,7 +70,7 @@ fun PrintMediaTabLayout() {
             state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(32.dp)
         ) { page ->
             PrintMediaTabContent(tabLabel = mediaTabs[page])
         }
