@@ -1,15 +1,19 @@
 package com.zelkulon.printzone1
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,7 +49,12 @@ fun PrintMediaTabLayout() {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        Spacer(modifier = Modifier.height(128.dp))
+        Spacer(modifier = Modifier.height(132.dp))
+        SearchLikeButton {
+
+        }
+
+        //Spacer(modifier = Modifier.height(128.dp))
         OrtArtWarenkorbRow(
             onWarenkorbClick = { expanded = true },
             selectedOption = deliveryOption,
@@ -54,13 +63,11 @@ fun PrintMediaTabLayout() {
             onLocationChange = { location = it }
         )
 
+        
+
+        
         //OrtArtWarenkorb
-
-
-        //Ort
-
-        //Art
-
+        
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
@@ -139,6 +146,10 @@ fun PrintMediaTabLayout() {
 
 
 }
+
+//Durchsuchen Button
+
+
 @Composable
 fun OrtArtWarenkorbRow(
     onWarenkorbClick: () -> Unit,
@@ -199,6 +210,41 @@ fun OrtArtWarenkorbRow(
                 .size(32.dp)
                 .clickable { onWarenkorbClick() }
         )
+    }
+}
+
+@Composable
+fun SearchLikeButton(
+    text: String = "Durchsuchen...",
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(56.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.magnifiericon), // Deine Lupe hier!
+                contentDescription = "Search Icon",
+                modifier = Modifier
+                    .size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
     }
 }
 
