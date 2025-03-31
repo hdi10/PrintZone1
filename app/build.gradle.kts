@@ -59,6 +59,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    //////////////////Accompanist IMPORT wegen https://github.com/hdi10/RandomChoiceHelperApplicationApp/blob/dev/app/src/main/res/drawable/randomgenerate.png
+    // RandomChoiceHelper Fragment
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
