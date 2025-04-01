@@ -1,0 +1,35 @@
+/*
+package com.zelkulon.printzone1
+
+val dummyItems = listOf(
+    MediaItem("📰", "Zeitung", "Gedruckte Tages- und Wochenzeitungen mit lokalen und internationalen Nachrichten."),
+    MediaItem("🗞️", "Artikel", "Einzelne Beiträge aus Zeitungen oder Magazinen zu aktuellen Themen."),
+    MediaItem("📖", "Magazin", "Illustrierte Hefte mit Themenschwerpunkten wie Mode, Technik oder Kultur."),
+    MediaItem("📚", "Broschüre", "Informationshefte für Werbung, Aufklärung oder Produktvorstellungen."),
+    MediaItem("🧾", "Flyer", "Einseitige oder gefaltete Werbezettel zur Promotion von Veranstaltungen oder Produkten."),
+    MediaItem("📑", "Katalog", "Umfangreiche Printmedien mit Produktübersichten, Preisen und Bestellmöglichkeiten."),
+    MediaItem("✉️", "Brief", "Gedruckte, persönliche oder geschäftliche Mitteilungen per Post."),
+    MediaItem("📬", "Postkarte", "Kurze Grüße mit Bildmotiv – ideal für Urlaubsgrüße und Direktwerbung."),
+    MediaItem("📇", "Visitenkarte", "Gedruckte Karten mit Kontaktdaten für professionelle Netzwerke."),
+    MediaItem("📦", "Verpackung", "Individuell bedruckte Verpackungen für Produkte jeder Art."),
+    MediaItem("📂", "Mappe", "Präsentationsmappen mit individuellen Designs für Unterlagen oder Angebote."),
+    MediaItem("🏷️", "Etikett", "Aufkleber oder Anhänger zur Produktkennzeichnung mit Logo oder Barcode."),
+    MediaItem("📄", "PDF", "Digitales Printformat für Dokumente, oft auch in gedruckter Form verwendet."),
+    MediaItem("🖼️", "Bild", "Hochqualitative Drucke von Fotos, Illustrationen oder Kunstwerken."),
+    MediaItem("🎨", "Layout", "Grafische Gestaltung von Printprodukten nach CI-Vorgaben."),
+    MediaItem("🖋️", "Typografie", "Auswahl und Gestaltung von Schriftarten für Druckmedien."),
+    MediaItem("📏", "Format", "Unterschiedliche Druckformate wie A4, A5 oder Sondergrößen."),
+    MediaItem("🔖", "Lesezeichen", "Gedruckte Werbeträger für Bücher oder Aktionen."),
+    MediaItem("🧷", "Heftung", "Bindungstechniken für Broschüren, Magazine oder Berichte."),
+    MediaItem("🧩", "Infografik", "Visualisierte Informationen zur besseren Verständlichkeit."),
+    MediaItem("📊", "Diagramm", "Grafische Darstellung von Daten für Berichte oder Präsentationen."),
+    MediaItem("🧮", "Raster", "Druckraster für exakte Bild- und Layoutplatzierung."),
+    MediaItem("🕸️", "Designnetz", "Kreative Gitter und Designsysteme für visuelle Ordnung."),
+    MediaItem("🔲", "Muster", "Wiederkehrende Designelemente für Hintergrund oder Branding."),
+    MediaItem("🧭", "Orientierung", "Gestaltung von Leitsystemen oder Wegweisern auf Printbasis."),
+    MediaItem("📐", "Linien", "Linien- und Gitternetzgestaltung in technischen Zeichnungen."),
+    MediaItem("📅", "Kalender", "Jahres-, Monats- oder Wochenkalender mit individuellem Design."),
+    MediaItem("📌", "Plakat", "Großformatige Poster für Veranstaltungen oder Werbung."),
+    MediaItem("🖨️", "Druckauftrag", "Abwicklung individueller Druckaufträge über das System."),
+    MediaItem("📥", "Einwurf", "Verteilaktionen wie Briefkasteneinwurf oder Beilagen.")
+)*/
