@@ -1,5 +1,5 @@
 package com.zelkulon.printzone1
-
+import com.zelkulon.printzone1.port.viewmodel.PrintMediaViewModel
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -26,6 +26,8 @@ import kotlinx.coroutines.launch
 
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.zelkulon.printzone1.core.data.remote.dto.PrintMediaDto
+import com.zelkulon.printzone1.core.domain.model.PrintMedia
 
 
 private val mediaTabs = listOf(
@@ -35,6 +37,8 @@ private val mediaTabs = listOf(
     "🔖 Lesezeichen", "🧷 Heftung", "🧩 Infografik", "📊 Diagramm", "🧮 Raster",
     "🕸️ Designnetz", "🔲 Muster", "🧭 Orientierung", "📐 Linien", "📅 Kalender"
 )
+
+
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
@@ -48,11 +52,16 @@ fun PrintMediaTabLayout() {
 
 
     Column(modifier = Modifier.fillMaxSize()) {
+        ////////////////////
 
         Spacer(modifier = Modifier.height(132.dp))
+
+        ////////////////////
         SearchLikeButton {
 
         }
+
+        ////////////////////
 
         //Spacer(modifier = Modifier.height(128.dp))
         OrtArtWarenkorbRow(
@@ -65,8 +74,8 @@ fun PrintMediaTabLayout() {
 
 
 
-
-        //OrtArtWarenkorb
+        ////////////////////
+        //Warenkorb
 
         DropdownMenu(
             expanded = expanded,
@@ -81,10 +90,8 @@ fun PrintMediaTabLayout() {
         }
 
 
-
-
-
-
+        ////////////////////
+        //TabRow
 
 
         ScrollableTabRow(
@@ -124,30 +131,56 @@ fun PrintMediaTabLayout() {
                 .fillMaxSize()
                 .padding(32.dp)
         ) { page ->
-            //TODO: Der Inhalt aus den Icons --> ContentLoad
-            //PrintMediaTabContent(tabLabel = mediaTabs[page])
+
+            PrintMediaTabContent(tabLabel = mediaTabs[page])
+
         }
     }
-
-
-    @Composable
-    fun PrintMediaTabContent(tabLabel: String) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Inhalt für: $tabLabel",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-
 
 }
 
+///////////////////////////////////////////////////////////////////
+//////////////////////////ScrolBar Inhalt              /////////////
+///////////////////////////////////////////////////////////////////
+
+// PrintMediaTabContent → ersetzen:
+@Composable
+fun PrintMediaTabContent(tabLabel: String, viewModel: PrintMediaViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+    val _medien = mutableStateListOf<PrintMediaDto>()
+    val medien: List<PrintMediaDto> = _medien
+
+    LaunchedEffect(Unit) {
+        viewModel.loadPrintMediaList()
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Inhalt für: $tabLabel",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        PrintMediaList(medien)
+    }
+}
+
+@Composable
+fun PrintMediaList(medien: List<PrintMediaDto>) {
+    Column {
+        medien.forEach {
+            Text(text = "• ${it.id} – ${it.title} - ${it.description} •")
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////
 //Durchsuchen Button
+///////////////////////////////////////////////////////////////////
 
 
 @Composable
@@ -212,6 +245,11 @@ fun OrtArtWarenkorbRow(
         )
     }
 }
+
+
+///////////////////////////////////////////////////////////////////
+/// Durchsuchen Feld    ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 
 @Composable
 fun SearchLikeButton(
