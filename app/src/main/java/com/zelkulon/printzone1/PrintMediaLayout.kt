@@ -1,25 +1,24 @@
 package com.zelkulon.printzone1
 
-import android.content.Context
-import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
@@ -27,8 +26,9 @@ import kotlinx.coroutines.launch
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
+data class MediaTab(val title: String, @DrawableRes val imageRes: Int)
 
-private val mediaTabs = listOf(
+private val mediaTabs1 = listOf(
     "📰 Zeitung", "🗞️ Artikel", "📖 Magazin", "📚 Broschüre", "🧾 Flyer", "📑 Katalog",
     "✉️ Brief", "📬 Postkarte", "📇 Visitenkarte", "📦 Verpackung", "📂 Mappe",
     "🏷️ Etikett", "📄 PDF", "🖼️ Bild", "🎨 Layout", "🖋️ Typografie", "📏 Format",
@@ -36,6 +36,33 @@ private val mediaTabs = listOf(
     "🕸️ Designnetz", "🔲 Muster", "🧭 Orientierung", "📐 Linien", "📅 Kalender"
 )
 
+private val mediaTabs = listOf(
+    "📦 Aufsteller",
+    "🎌 Banner",
+    "🚩 Fahnen",
+    "🛡️ Hygieneschutz",
+    "🧻 Klebefolie",
+    "💡 Leuchtkästen",
+    "🧱 Messewände",
+    "📢 Plakate",
+    "📰 Printmedien",
+    "📜 RollUp",
+    "🚧 Werbeschilder"
+)
+
+private val mediaTabs2 = listOf(
+    MediaTab("📦 Aufsteller",R.drawable.aufsteller),
+    MediaTab("🗞️ Banner",R.drawable.banner),
+    MediaTab("📖 Fahnen",R.drawable.fahnen),
+    MediaTab("🛡️ Hygieneschutz",R.drawable.hygieneschutz),
+    MediaTab("🧻 Klebefolie",R.drawable.klebefolien),
+    MediaTab("💡 Leuchtkästen",R.drawable.leuchtkasten),
+    MediaTab("🧱 Messewände",R.drawable.messewand),
+    MediaTab("📢 Plakate",R.drawable.plakate),
+    MediaTab("📰 Printmedien",R.drawable.printmedien),
+    MediaTab("📜 RollUp",R.drawable.rollup),
+    MediaTab("🚧 Werbeschilder",R.drawable.werbeschilder),
+)
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
@@ -48,8 +75,11 @@ fun PrintMediaTabLayout() {
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-
-        Spacer(modifier = Modifier.height(132.dp))
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo"
+        )
+        //Spacer(modifier = Modifier.height(16.dp))
         SearchLikeButton {
 
         }
@@ -83,11 +113,48 @@ fun PrintMediaTabLayout() {
 
 
 
-
-
-
-
         ScrollableTabRow(
+            selectedTabIndex = pagerState.currentPage,
+            edgePadding = 8.dp
+        ) {
+            mediaTabs2.forEachIndexed { index, tab ->
+                val (label, imageRes) = tab
+                val (emoji, title) = label.split(" ", limit = 2).let {
+                    it.first() to it.getOrElse(1) { "" }
+                }
+
+                Tab(
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(
+                                painter = painterResource(id = imageRes),
+                                contentDescription = title,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .size(96.dp)
+                                    .padding(bottom = 4.dp)
+                            )
+                            Text(
+                                title,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+
+
+
+        /*ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
             edgePadding = 8.dp
         ) {
@@ -105,14 +172,30 @@ fun PrintMediaTabLayout() {
                     },
                     text = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(icon, textAlign = TextAlign.Center)
+                            Text(icon,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.headlineLarge)
                             Text(
                                 title,
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.labelSmall
+                                style = MaterialTheme.typography.labelLarge
                             )
                         }
                     }
+                )
+            }
+        }*/
+
+        @Composable
+        fun PrintMediaTabContent(tabLabel: String) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Inhalt für: $tabLabel",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -125,24 +208,12 @@ fun PrintMediaTabLayout() {
                 .padding(32.dp)
         ) { page ->
             //TODO: Der Inhalt aus den Icons --> ContentLoad
-            //PrintMediaTabContent(tabLabel = mediaTabs[page])
+            PrintMediaTabContent(tabLabel = mediaTabs[page])
         }
     }
 
 
-    @Composable
-    fun PrintMediaTabContent(tabLabel: String) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Inhalt für: $tabLabel",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
+
 
 
 }
@@ -248,6 +319,11 @@ fun SearchLikeButton(
     }
 }
 
+@Preview
+@Composable
+fun SimpleComposablePreview() {
+    PrintMediaTabLayout()
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////////////////////Content -> Alle Geschäfte in der nähe //////////////////////////
