@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -64,6 +65,29 @@ private val mediaTabs2 = listOf(
     MediaTab("🚧 Werbeschilder",R.drawable.werbeschilder),
 )
 
+val availableShops = listOf(
+    Shop("artist36", "Artist36") { Artist36Screen() },
+    Shop("mcprint24", "McPrint24") { McPrint24Screen() }
+)
+
+@Composable
+fun ShopDetailScreen(shopName: String, onBack: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Details für $shopName", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Hier könnten Öffnungszeiten, Standort, Telefonnummer, usw. stehen.")
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Zurück",
+            modifier = Modifier
+                .clickable { onBack() }
+                .padding(12.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
 fun PrintMediaTabLayout() {
@@ -72,6 +96,25 @@ fun PrintMediaTabLayout() {
     var expanded by remember { mutableStateOf(false) }
     var location by remember { mutableStateOf("Berlin") } // oder GPS-Ort später einbinden
     var deliveryOption by remember { mutableStateOf("Lieferung") }
+    var selectedShop by remember { mutableStateOf<Shop?>(null) }
+
+    if (selectedShop != null) {
+        Column(Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable { selectedShop = null },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("← Zurück", style = MaterialTheme.typography.bodyLarge)
+            }
+
+            // Dann zeig den Shop-Inhalt
+            selectedShop!!.detailContent()
+        }
+        return
+    }
 
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -186,7 +229,7 @@ fun PrintMediaTabLayout() {
             }
         }*/
 
-        @Composable
+        /*@Composable
         fun PrintMediaTabContent(tabLabel: String) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -198,6 +241,41 @@ fun PrintMediaTabLayout() {
                     textAlign = TextAlign.Center
                 )
             }
+        }*/
+
+
+        @Composable
+        fun PrintMediaTabContent(tabLabel: String, onShopClick: (Shop) -> Unit) {
+            val shops = availableShops // später evtl. nach Kategorie filtern
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                if (shops.isNotEmpty()) {
+                    Text("Anbieter für: $tabLabel", style = MaterialTheme.typography.headlineSmall)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    shops.forEach { shop ->
+                        Text(
+                            text = shop.name,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onShopClick(shop) }
+                                .padding(vertical = 12.dp),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                } else {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(
+                            "Keine Anbieter für: $tabLabel",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
         }
 
         HorizontalPager(
@@ -208,7 +286,10 @@ fun PrintMediaTabLayout() {
                 .padding(32.dp)
         ) { page ->
             //TODO: Der Inhalt aus den Icons --> ContentLoad
-            PrintMediaTabContent(tabLabel = mediaTabs[page])
+            PrintMediaTabContent(
+                tabLabel = mediaTabs[page],
+                onShopClick = { selectedShop = it } // 🔥 jetzt perfekt!
+            )
         }
     }
 
@@ -319,11 +400,57 @@ fun SearchLikeButton(
     }
 }
 
+@Composable
+fun Artist36Screen(viewModel: Artist36ViewModel = viewModel()) {
+    val medien = viewModel.printmedien
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+
+        Text("Artist36 – Werbetechnik & Film Production Support", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("FILM PRODUCTION SUPPORT BERLIN KREUZBERG")
+        Text("Adresse: Adalbertstr. 4, 10999 Berlin")
+        Text("Telefon: +49 30 61 20 37 56")
+        Text("Mobil: +49 162 76 76 557")
+        Text("E-Mail: info@artists36.de")
+        Text("Inhaber: Aman Akbarov", style = MaterialTheme.typography.bodySmall)
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text("📦 Produkte von Artist36:", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (medien.isEmpty()) {
+            Text("⏳ Lade Produkte...")
+        } else {
+            medien.forEach { item ->
+                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    Text("• ${item.titel} – ${item.preis} €", style = MaterialTheme.typography.bodyLarge)
+                    Text(item.beschreibung, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun McPrint24Screen() {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Text("McPrint24 Produkte")
+        // TODO: API Call, Listen, Details usw.
+    }
+}
+
 @Preview
 @Composable
 fun SimpleComposablePreview() {
     PrintMediaTabLayout()
 }
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////////////////////Content -> Alle Geschäfte in der nähe //////////////////////////
